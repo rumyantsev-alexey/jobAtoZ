@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <title>Объявления</title>
+        <meta charset="utf-8">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <script>
+
+            function goAdd() {
+                window.location.href = '/cars/add';
+            }
+
+            jQuery(document).ready(function($) {
+                $("#mark").hide();
+                $(function() {
+                    $("#filters").focus();
+                });
+                $(".clickable-row").click(function() {
+                    window.location = $(this).data("href");
+                });
+            });
+
+            function goFilter() {
+                $.ajax({
+                    type: "POST",
+                    url: "/cars/list",
+                    contentType: 'application/json',
+                    dataType:"html",
+                    data:JSON.stringify({action:$("#filters").val(), mark:$("#mark").val()}),
+                    success: function(data, textStatus, jqXHR){
+                        $("#tbody").html("");
+                        $("#tbody").html(data);
+                    },
+                    error: function(data, textStatus, jqXHR){
+                    }
+                    })
+            }
+
+            function goReset() {
+                window.location = "/cars/list";
+            }
+
+            function setEnable() {
+                $("#reset").prop("disabled", false);
+                $("#apply").prop("disabled", false);
+                if ($("#filters").val()==="selectmark") {
+                    $("#mark").show();
+                } else {
+                    $("#mark").hide();
+                }
+            }
+
+        </script>
+        <div class="container">
+            <div class="row col-md-6 col-md-offset-2 custyle">
+                <div sec:authorize="isAuthenticated()">
+                    Текущий пользователь: <span sec:authentication="principal.username"></span>
+                    <form method='post' action='/logout'>
+                            <input type='submit' class="btn btn-default btn-sm" name='but3' value='Поменять пользователя'/>
+                    </form>
+                    <form method='get' action='/cars/add'>
+                       <input type='button' class="btn btn-default btn-sm" name='but2' value='Добавить новое объявление' onclick="goAdd();" />
+                    </form>
+                </div>
+                <div sec:authorize="!isAuthenticated()">
+                    <input type='submit' class="btn btn-default btn-sm" name='but2' value='Войти под пользователем' onclick="window.location.href = '/cars/login';"/>
+                </div>
+                <br>
+                <hr/>
+                <table class="table table-hover" id="List">
+                    <thead>
+                        Фильтр:
+                        <select name="filters" id="filters" onchange="setEnable();">
+                            <option selected disabled>Выбрать фильтр</option>
+                            <option value="actual">Актуальные</option>
+                            <option value="lastday">За сегодня</option>
+                            <option value="withfoto">Есть фото</option>
+                            <option value="selectmark">Выбранная марка</option>
+                        </select>
+                        <select name="mark" id="mark">
+                            <option selected disabled>Select brand</option>
+                            <option th:each="mrk:${MarkEntityList}" th:text="${mrk.name}">${mrk.name}</option>
+                        </select>
+                        <input type='button' class="btn btn-primary btn-xs" name='reset' id='reset' value='Сброс' onclick="goReset();" disabled/>
+                        <input type='button' class="btn btn-primary btn-xs" name='apply' id='apply' value='Применить' onclick="goFilter();" disabled/><br>
+                        <hr/>
+                        <tr>
+                            <th>Id</th>
+                            <th>Модель</th>
+                            <th>Год выпуска</th>
+                            <th>Цена</th>
+                            <th>Дата создания</th>
+                            <th>Автор</th>
+                            <th>Актуальное</th>
+                            <th>Фото(шт)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <tr class='clickable-row' th:data-href='@{/cars/ad(id=${clist.id})}' th:each="clist:${carlist}">
+                            <td><a th:href="@{/cars/ad(id=${clist.id})}" th:text="${clist.id}"></a></td>
+                            <td th:text="${clist.model.name}"></td>
+                            <td th:text="${clist.issue}"></td>
+                            <td th:text="${clist.price}"></td>
+                            <td th:text="${clist.date}"></td>
+                            <td th:text="${clist.user.name}"></td>
+                            <td class="text-center"><span th:if="${!clist.old}" class="glyphicon glyphicon-ok"></span><span th:if="${clist.old}" class="glyphicon glyphicon-remove"></span></td>
+                            <td th:text="${clist.getFotos().size()}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

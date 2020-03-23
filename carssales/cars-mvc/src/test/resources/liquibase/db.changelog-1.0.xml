@@ -1,0 +1,13 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Alex" id="sqlTables">
+        <sqlFile path="classpath:liquibase/createtables.sql"/>
+    </changeSet>
+    <changeSet author="Alex" id="sqlData">
+        <sqlFile path="classpath:liquibase/insertdates.sql"/>
+    </changeSet>
+
+</databaseChangeLog>

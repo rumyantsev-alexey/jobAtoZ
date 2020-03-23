@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Объявление</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <script th:inline="javascript">
+            var state;
+            jQuery(document).ready(function() {
+                state = [[${!curcar.old}]];
+                console.log(state);
+                $("#check").prop("checked", state);
+            });
+
+            function checkFun() {
+                $("#save").prop("disabled", $("#check").prop("checked") == state);
+            }
+
+        </script>
+
+        <div class="container-fluid">
+            <br>
+            Объявление <span th:if="${curcar.old}"> не </span>актуально
+            <br>
+            <div class="row">
+                <div class="col-sm-4"> <b>Объявление:</b> <span th:text="${curcar.note}"></span></div>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-4"> <b>Город:</b> <span th:text="${curcar.city.name}"></span> </div>
+                <div class="col-sm-4"><b>Марка:</b> <span th:text="${curcar.mark.name}"></span></div>
+                <div class="col-sm-4"><b>Модель:</b> <span th:text="${curcar.model.name}"></span></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4"> <b>Цена:</b> <span th:text="${curcar.price}"></span> </div>
+                <div class="col-sm-4"><b>Год выпуска:</b> <span th:text="${curcar.issue}"></span> </div>
+                <div class="col-sm-4"><b>Пробег:</b> <span th:text="${curcar.dist}"></span> </div>
+            </div><br>
+            <div class="row">
+                <div class="col-sm-4"> <b>Коробка передач:</b> <span th:text="${curcar.trans.name}"></span> </div>
+                <div class="col-sm-4"><b>Тип кузова:</b> <span th:text="${curcar.btype.name}"></span> </div>
+                <div class="col-sm-4"><b></b> </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4"> <b>Тип двигателя:</b> <span th:text="${curcar.etype.name}"></span> </div>
+                <div class="col-sm-4"><b>Объем двигателя:</b> <span th:text="${curcar.enginecapacity}"></span> </div>
+                <div class="col-sm-4"><b>Мощность двигателя:</b> <span th:text="${curcar.power}"></span> </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4"> <b>Привод:</b> <span th:text="${curcar.dunit.name}"></span> </div>
+                <div class="col-sm-4"><b>Руль:</b> <span th:text="${curcar.wheel.name}"></span> </div>
+                <div class="col-sm-4"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4"><b>Автор:</b> <span th:text="${curcar.user.name}"></span> </div>
+            </div><br>
+            <img th:each="foto:${curcar.fotos}" th:src="@{/cars/image(cid=${foto.id})}" height="100" width="200"/>
+            <br>
+            <br>
+           <div th:if="${loginUser == curcar.user.name}">
+               <label class="checkbox-inline">
+                   <input  type="checkbox" value="" id="check" onclick="checkFun();" />
+                        актуальность
+                </label>
+                <br>
+                <form method='post' th:action='@{/cars/ad(id=${curcar.id})}'>
+                        <input type='submit' class="btn btn-default" id="save" name='save' value='Записать'  disabled />
+                </form>
+            </div>
+            <br>
+            <input type='button' class="btn btn-default" name='but3' onclick="window.location.href = '/cars/list';" value='Назад'/>
+        </div>
+    </body>
+</html>

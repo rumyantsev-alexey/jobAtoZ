@@ -1,0 +1,10 @@
+<tr class='clickable-row' th:data-href='@{/cars/ad(id=${clist.id})}' th:each="clist:${carlist}">
+    <td><a th:href="@{/cars/ad(id=${clist.id})}" th:text="${clist.id}"></a></td>
+    <td th:text="${clist.model.name}"></td>
+    <td th:text="${clist.issue}"></td>
+    <td th:text="${clist.price}"></td>
+    <td th:text="${clist.date}"></td>
+    <td th:text="${clist.user.name}"></td>
+    <td class="text-center"><span th:if="${!clist.old}" class="glyphicon glyphicon-ok"></span><span th:if="${clist.old}" class="glyphicon glyphicon-remove"></span></td>
+    <td th:text="${clist.getFotos().size()}"></td>
+</tr>
