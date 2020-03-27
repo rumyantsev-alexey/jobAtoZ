@@ -12,7 +12,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import ru.job4j.shortener.repositories.UsersRepository;
 import ru.job4j.shortener.services.LinksService;
 import ru.job4j.shortener.services.UsersService;
 
