@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>ToDo list</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style type="text/css">
+            TABLE {
+                table-layout: fixed; /* Ячейки фиксированной ширины */
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            // массив списк дел
+            var list ;
+            // массив дел помеченных к изменению в хранилище
+            var chgId = new Array();
+
+            // получаем список дел
+            $( document ).ready(function() {
+                $("#desc").val("");
+                if (chgId.length > 0 ) {
+                    $("#listupdate").prop("disabled", false);
+                } else {
+                    $("#listupdate").prop("disabled", true);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/todo",
+                    contentType: 'application/json',
+                    data: JSON.stringify({type: "loadList"}),
+                    success: function (data, textStatus, jqXHR) {
+                        list = jQuery.parseJSON(jqXHR.responseText);
+                        ShowList($("#chkList").prop("checked"));
+                    },
+                    error: function (data, textStatus, jqXHR) {
+                        console.log('load list error');
+                    }
+                })
+            });
+
+            // отображаем список дел в зависимости от опции
+            function ShowList(checkShowList) {
+                $("#List tbody").html("");
+                $.each(list, function (index, value) {
+                    if (!checkShowList && value.done) {
+                        return true;
+                    }
+                    $("#List tbody").append("<tr>");
+                    $("#List tbody").append("<td >" + value.id + "</td>");
+                    $("#List tbody").append("<td>" + value.descr + "</td>");
+                    date = new Date(value.created);
+                    $("#List tbody").append("<td>" + date.toString() + "</td>");
+                    chk = "<input type='checkbox' onclick='checkDone(" + value.id +");' ";
+                    if (value.done) {
+                        chk += "checked";
+                    }
+                    chk +=  " >";
+                    $("#List tbody").append("<td>"+chk+"</td>");
+                    $("#List tbody").append("</tr>");
+                });
+            }
+
+            // добавляем новое дело
+            function addDo() {
+                if($("#desc").val() != '') {
+                    $.ajax({
+                        type: "POST",
+                        url: "/todo",
+                        contentType: 'application/json',
+                        data: JSON.stringify({type: "newDo", text: $("#desc").val()}),
+                        success: function (data, textStatus, jqXHR) {
+                            alert(jqXHR.responseText);
+                        },
+                        error: function (data, textStatus, jqXHR) {
+                            console.log('add do error');
+                        }
+                    })
+                } else {
+                    alert("Текст не введен");
+                }
+                location.reload();
+            }
+
+            // сохраняем изменения в списке дел
+            function saveList() {
+                $.ajax({
+                    type: "POST",
+                    url: "/todo",
+                    contentType: 'application/json',
+                    data: JSON.stringify({type: "updateList", chgId }),
+                    success: function (data, textStatus, jqXHR) {
+                        alert(jqXHR.responseText);
+                        location.reload();
+                    },
+                    error: function (data, textStatus, jqXHR) {
+                        console.log('save list error');
+                        location.reload();
+                    }
+                })
+            }
+
+            // обработка нажатия фильтра
+            function checkList() {
+                ShowList($("#chkList").prop("checked"));
+            }
+
+            // проверка изменений при нажатии чекбокс в списке
+            function checkDone(id) {
+                console.log(id);
+                $.each(list, function (index, value) {
+                    if (value.id == id) {
+                        value.done = ! value.done;
+                        return false;
+                    }
+                });
+                var result = true;
+                $.each(chgId, function (index, value) {
+                    if (value == id) {
+                        chgId.splice(index,1);
+                        result = false;
+                        return false;
+                    }
+                });
+                if (result) {
+                    chgId.push(id);
+                }
+                ShowList($("#chkList").prop("checked"));
+                if (chgId.length > 0 ) {
+                    $("#listupdate").prop("disabled", false);
+                } else {
+                    $("#listupdate").prop("disabled", true);
+                }
+           }
+
+           // активация кнопки при заполнении поля новой задачи
+           function stateButton() {
+               if($("#desc").val() != '') {
+                   $("#saveNewDo").prop("disabled", false);
+               } else {
+                   $("#saveNewDo").prop("disabled", true);
+               }
+           }
+
+        </script>
+
+        <div class="container">
+            <div class="row pt-3">
+                <h4>
+                    New ToDo:
+                </h4>
+                <form id="newDo" name="newDo">
+                    <label for="desc">Text ToDo:</label>
+                    <textarea class="form-control" rows="5" id="desc" onchange="stateButton();" ></textarea>
+                    <button type="button" id="saveNewDo" class="btn btn-success" onclick="addDo();" disabled> Сохранить новое ToDo </button>
+                </form>
+                <h4>
+                    ToDo List:
+                </h4>
+                <input type="checkbox" id="chkList" onclick="checkList();" checked> Show finished ToDo
+                <div class="container">
+                    <form id="ToDoList" name="ToDoList">
+                        <table class="table table-striped" id="List">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Task</th>
+                                <th>Date</th>
+                                <th>Finished</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button type="button" id="listupdate" class="btn btn-success"  onclick="saveList();" disabled> Сохранить изменения в списке</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Cinema</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<script>
+    var sum=0;
+    var today;
+    var zone;
+    var sess;
+
+    $( document ).ready(function() {
+
+        // определяем текущую дату
+        var date = new Date();
+        today = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+        $("#calendar").prop("value", today);
+        $("#calendar").prop("min", today);
+
+        // получаем список кинозалов
+        $.ajax({
+            type: "POST",
+            url: "/cinema",
+            contentType: 'application/json',
+            data:JSON.stringify({type:"getZone", data:"zone"}),
+            success: function(data, textStatus, jqXHR){
+                zone = jQuery.parseJSON(jqXHR.responseText);
+                $.each(zone, function (index, value) {
+                    $("#zone").append("<option  value='"+value.name+"'>"+value.name+"</option>");
+                });
+                nextAjax();
+            },
+            error: function(data, textStatus, jqXHR){
+                console.log('init zone error');
+            }
+        })
+
+        // получаем список сеансов
+        function nextAjax() {
+            $.ajax({
+                type: "POST",
+                url: "/cinema",
+                contentType: 'application/json',
+                data: JSON.stringify({type: "getSession", data: "session"}),
+                success: function (data, textStatus, jqXHR) {
+                    sess = jQuery.parseJSON(jqXHR.responseText);
+                    $.each(sess, function (index, value) {
+                        $("#session").append("<option value='"+value.name+"'>"+value.name+"</option>");
+                    });
+                    nextnextAjax();
+                },
+                error: function (data, textStatus, jqXHR) {
+                    console.log('init session error');
+                }
+            })
+        }
+
+        // устанавливаем метод и интервал обновления
+        setInterval(timerefresh, 300000);
+
+        function timerefresh(){
+            if(sum == 0) {
+                 onChange();
+                console.log("Timer refresh");
+            }
+        }
+    });
+
+
+    // Обработка адресной строки на возврат со странички платежа
+    function nextnextAjax() {
+        var x = window.location.hash.split("#");
+        if (x.length > 1) {
+            var y = JSON.parse(atob(x[1]));
+            $("#calendar").prop("value", y.calendar);
+            $("#zone [value=" + y.zone + "]").prop('selected', true);
+            $("#session option[value=" +  y.session + "]").prop('selected', true);
+        }
+        onChange();
+        $("#sum").html(sum +" руб" );
+    };
+
+    // Проверка корректности даты
+    function onChange() {
+        if ($("#calendar").prop("value") >= today) {
+            sum = 0;
+            $("#sum").html(sum +" руб" );
+            cur_zone = zone[$("#zone option:selected").index()];
+            showHall(cur_zone.row, cur_zone.col);
+         } else {
+            $("#calendar").prop("value", today);
+        }
+    }
+
+    // Отрисовка зала по заданным параметрам (слой зал, слой занятность, слой цена)
+    function showHall(row, col) {
+        $("#hall").html("");
+        var content ="<thead><tr><th style='width: 120px;'>Row / Col</th>";
+        for (i=1; i < col+1; i++) {
+            content+="<th>"+i+"</th>";
+        }
+        content+="</tr></thead><tbody>";
+        for (r = 1; r < row+1; r++) {
+            content+="<tr><th>"+r+"</th>";
+            for (c =1; c < col+1; c++) {
+                content+="<td><input type='checkbox' id='" + r + "x" + c + "' onchange='onCheckBox(this);' ></td>";
+            }
+            content+="</tr>";
+        }
+        content+="</tbody>";
+        $('#hall').append(content);
+        var packet = {
+            type: "getBusy",
+            calendar: $("#calendar").prop("value"),
+            zone: $("#zone").prop("value"),
+            session: $("#session").prop("value")
+        }
+        $.ajax({
+            type: "POST",
+            url: "/cinema",
+            contentType: 'application/json',
+            data:JSON.stringify(packet),
+            success: function(data, textStatus, jqXHR){
+                busy = JSON.parse(jqXHR.responseText);
+                if(busy.length > 0) {
+                    $.each(busy, function (index, value) {
+                        var str = "#" + value.row + "x" + value.col;
+                        $(str).prop("checked", true);
+                        $(str).prop("disabled", true);
+                    });
+                }
+            },
+            error: function(data, textStatus, jqXHR){
+                console.log('showHall error');
+            }
+        })
+        // проверка на доступен ли сеанс по времени
+        if ( $("#calendar").prop("value") == today && notime($("#session option:selected").index())) {
+            $("input[type=checkbox]").prop('disabled', true);
+            $("input[type=checkbox]").prop('title', "этот сеанс в прошлом ((");
+        } else {
+            packet.type = "getCost";
+            $.ajax({
+                type: "POST",
+                url: "/cinema",
+                contentType: 'application/json',
+                data: JSON.stringify(packet),
+                success: function (data, textStatus, jqXHR) {
+                    cost = JSON.parse(jqXHR.responseText);
+                    $.each(cost, function (index, value) {
+                        for (var i = 1; i < col + 1; i++) {
+                            var str = "#" + Number(index + 1) + "x" + i;
+                            $(str).prop("title", "цена " + value + " руб.");
+                            $(str).prop("value", value);
+                        }
+                    });
+                },
+                error: function (data, textStatus, jqXHR) {
+                    console.log('showHall error');
+                }
+            })
+        }
+    }
+
+    // Суммирование цены билета при выборе checkbox-а
+    function onCheckBox(obj) {
+        if (obj.checked) {
+            sum+=Number($(obj).prop("value"));
+        } else {
+            sum-=Number($(obj).prop("value"));
+        }
+        $("#sum").html(sum +" руб");
+    }
+
+    // Формирование параметров заказа и переход на платеж
+    function Sale() {
+        if (sum > 0) {
+            var seat = [];
+            $('input:checked').not('[disabled]').each(function () {
+                seat.push($(this).prop("id"));
+            })
+            var packet = {
+                type: "saleZakaz",
+                calendar: $("#calendar").prop("value"),
+                zone: $("#zone").prop("value"),
+                session: $("#session").prop("value"),
+                seats: seat,
+                sum: sum
+            }
+            var epacket = btoa(JSON.stringify(packet));
+            window.location.href = 'http://localhost:8080/chapter_009/payment.html#' + epacket;
+        } else {
+            alert("Не выбраны места");
+        }
+    }
+
+    function notime(index) {
+        var date = new Date();
+        var date1 = new Date(today);
+        cur_time = date.getTime();
+        a = sess[index].time.split("-");
+        sess_time = a[0]*60*60*1000 + a[1]*60*1000-300000;
+        if (cur_time > (sess_time+date1.getTime())) {
+            return true;
+        }
+    }
+
+</script>
+
+<div class="container">
+    <div class="row pt-3">
+        <h4>
+            Бронирование мест на сеанс
+        </h4>
+        <form id="form1" name="form1">
+            Дата:
+            <input type="date" name="calendar" id="calendar" onchange='onChange()' value="" min="">
+            Зал:
+            <select id="zone" onchange="onChange()"></select>
+            Сеанс:
+            <select id="session" onchange="onChange()"></select>
+        </form>
+        <table class="table table-striped" id="hall">
+        </table>
+    </div>
+    <div class="row float-right">
+        <p>Выбрано билетов на сумму: </p>   <p id='sum' ></p>
+        <button type="button" class="btn btn-success" onclick="Sale();">Заказать</button>
+    </div>
+</div>
+</body>
+</html>
