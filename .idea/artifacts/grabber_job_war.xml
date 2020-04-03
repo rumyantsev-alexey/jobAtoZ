@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="grabber-job:war">
+    <output-path>$PROJECT_DIR$/grabber-job/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>grabber-job</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="grabber-job-1.0.war">
+      <element id="artifact" artifact-name="grabber-job:war exploded" />
+    </root>
+  </artifact>
+</component>

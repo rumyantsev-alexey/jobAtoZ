@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS item (id varchar(45) primary key, name VARCHAR(45), des varchar(45), created timestamp);
+CREATE TABLE IF NOT EXISTS comments ( id serial primary key, text varchar(100), itemid varchar(45) references item(id));

@@ -2,17 +2,29 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="tracker" />
+        <module name="cinema" />
         <module name="infobip" />
+        <module name="jobAtoZ" />
+        <module name="todo" />
+        <module name="grabber-job" />
         <module name="cars-mvc" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cars-mvc" target="12" />
+      <module name="cinema" target="1.11" />
+      <module name="grabber-job" target="1.11" />
       <module name="infobip" target="12" />
+      <module name="jobAtoZ" target="1.5" />
+      <module name="racker" target="1.11" />
+      <module name="todo" target="1.11" />
+      <module name="tracker" target="1.11" />
     </bytecodeTargetLevel>
   </component>
 </project>

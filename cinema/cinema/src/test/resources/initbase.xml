@@ -1,0 +1,71 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="Alex" id="Create table">
+        <createTable tableName="busy_pattern">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="busy_pattern_pkey"/>
+            </column>
+            <column name="date" type="VARCHAR(15)"/>
+            <column name="row" type="INTEGER"/>
+            <column name="col" type="INTEGER"/>
+            <column name="sess_id" type="INTEGER"/>
+            <column name="zone_id" type="INTEGER"/>
+            <column name="cli_id" type="INTEGER"/>
+        </createTable>
+
+        <createTable tableName="clients">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="clients_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(50)"/>
+            <column name="phone" type="VARCHAR(30)"/>
+        </createTable>
+
+        <createTable tableName="cost_pattern">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="cost_pattern_pkey"/>
+            </column>
+            <column name="row" type="INTEGER"/>
+            <column name="cost" type="INTEGER"/>
+            <column name="sess_id" type="INTEGER"/>
+            <column name="zone_id" type="INTEGER"/>
+        </createTable>
+
+        <createTable tableName="session">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="session_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(50)"/>
+            <column name="time" type="VARCHAR(15)"/>
+        </createTable>
+
+        <createTable tableName="zone">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="zone_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(50)"/>
+            <column name="size_row" type="INTEGER"/>
+            <column name="size_col" type="INTEGER"/>
+        </createTable>
+
+        <addUniqueConstraint columnNames="date, row, col, sess_id, zone_id" constraintName="busy_pattern_date_row_col_sess_id_zone_id_key" tableName="busy_pattern"/>
+
+        <addUniqueConstraint columnNames="name, phone" constraintName="clients_name_phone_key" tableName="clients"/>
+
+        <addUniqueConstraint columnNames="row, cost, sess_id, zone_id" constraintName="cost_pattern_row_cost_sess_id_zone_id_key" tableName="cost_pattern"/>
+
+        <addUniqueConstraint columnNames="name" constraintName="session_name_key" tableName="session"/>
+
+        <addUniqueConstraint columnNames="name" constraintName="zone_name_key" tableName="zone"/>
+
+        <addForeignKeyConstraint baseColumnNames="cli_id" baseTableName="busy_pattern" constraintName="busy_pattern_cli_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="clients" validate="true"/>
+
+        <addForeignKeyConstraint baseColumnNames="sess_id" baseTableName="busy_pattern" constraintName="busy_pattern_sess_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="session" validate="true"/>
+
+        <addForeignKeyConstraint baseColumnNames="zone_id" baseTableName="busy_pattern" constraintName="busy_pattern_zone_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="zone" validate="true"/>
+
+        <addForeignKeyConstraint baseColumnNames="sess_id" baseTableName="cost_pattern" constraintName="cost_pattern_sess_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="session" validate="true"/>
+
+        <addForeignKeyConstraint baseColumnNames="zone_id" baseTableName="cost_pattern" constraintName="cost_pattern_zone_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="zone" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="jquery.maskedinput.min.js"></script>
+</head>
+<body>
+<script>
+
+    var x = window.location.hash.split("#")[1];
+    var y = JSON.parse(atob(x));
+
+    $( document ).ready(function() {
+
+        str="<b>Сумма заказа:  </b><i>"+ y.sum + " руб.</i></br>";
+        str+="<b>Дата:  </b><i>" + y.calendar + "</i></br>";
+        str+="<b>Сеанс:  </b><i>" + y.session + "</i></br>";
+        str+="<b>Кинозал:  </b><i>" + y.zone + "</i></br>";
+        str+="<b>Места:  </b><i>" + y.seats + "</i></br>";
+        $("#info").append(str);
+
+        $("#Phone").mask("+7 (999) 999-99-99");
+
+    });
+
+    function Pay() {
+        if($("#Name").val() != '' && $("#Phone").val() != '') {
+            var packet = {
+                type: "saleZakaz",
+                data: y,
+                name: $("#Name").val(),
+                phone: $("#Phone").val()
+            }
+            $.ajax({
+                type: "POST",
+                url: "/chapter_009/cinema",
+                contentType: 'application/json',
+                data: JSON.stringify(packet),
+                success: function (data, textStatus, jqXHR) {
+                   alert(jqXHR.responseText);
+                   window.location.href = 'http://localhost:8080/chapter_009/index.html#' + x;
+                },
+                error: function (data, textStatus, jqXHR) {
+                    console.log('saleZakaz error');
+                }
+            });
+        } else {
+            alert("Введены не все данные");
+        }
+    }
+</script>
+<div class="container">
+    <h4>
+        Заказ:
+    </h4>
+    <div id="info"></div>
+    <b>Имя:  </b><input type="text" id="Name" required placeholder="Введите имя" name="Name"></br>
+    <b>Телефон:  </b><input type="tel" id="Phone" required placeholder="+7 (xxx) xxx xx xx" name="Phone">
+
+<div class="row float-right">
+    <button type="button" class="btn btn-success" onclick="window.location.href = 'http://localhost:8080/chapter_009/index.html#'+x;">Отмена</button>
+    <button type="button" class="btn btn-success" onclick="Pay();">Оплатить</button>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ru.job4j</groupId>
+    <artifactId>jobAtoZ</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+
+    <properties>
+        <java.version>12</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>carssales</module>
+        <module>infobip</module>
+        <module>todo</module>
+        <module>cinema</module>
+        <module>grabber-job</module>
+        <module>tracker</module>
+    </modules>
+
+</project>

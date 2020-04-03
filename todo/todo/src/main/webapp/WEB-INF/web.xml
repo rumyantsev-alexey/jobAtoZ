@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+
+    <servlet>
+        <servlet-name>ToDoServlet</servlet-name>
+        <servlet-class>ru.job4j.todo.ToDoServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ToDoServlet</servlet-name>
+        <url-pattern>/todo</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>ru.job4j.cars.ImageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/cars/image</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CarServlet</servlet-name>
+        <servlet-class>ru.job4j.cars.CarServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CarServlet</servlet-name>
+        <url-pattern>/cars/ad</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>ru.job4j.cars.LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/cars/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ListServlet</servlet-name>
+        <servlet-class>ru.job4j.cars.ListServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ListServlet</servlet-name>
+        <url-pattern>/cars/list</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AddServlet</servlet-name>
+        <servlet-class>ru.job4j.cars.AddServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AddServlet</servlet-name>
+        <url-pattern>/cars/add</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>ToDoFilter</filter-name>
+        <filter-class>ru.job4j.todo.ToDoFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>ToDoFilter</filter-name>
+        <url-pattern>/todo</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>ru.job4j.cars.LoginFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/cars/*</url-pattern>
+    </filter-mapping>
+</web-app>
