@@ -10,7 +10,6 @@
         <module name="tracker" />
         <module name="cinema" />
         <module name="infobip" />
-        <module name="jobAtoZ" />
         <module name="todo" />
         <module name="grabber-job" />
         <module name="cars-mvc" />
