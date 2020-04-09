@@ -17,6 +17,7 @@
         <module>cinema</module>
         <module>grabber-job</module>
         <module>tracker</module>
+        <module>magnit</module>
     </modules>
 
 </project>

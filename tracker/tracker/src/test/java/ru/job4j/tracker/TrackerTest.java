@@ -2,14 +2,17 @@ package ru.job4j.tracker;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.net.URISyntaxException;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class TrackerTest {
-    Tracker tracker = Tracker.initTracker("config.properties");
+    ru.job4j.tracker.Tracker tracker = ru.job4j.tracker.Tracker.initTracker("config.properties");
 
     @Before
-    public void iniTracker() {
+    public void iniTracker() throws URISyntaxException {
         tracker.checkAll();
         tracker.delTable();
         tracker.checkAll();
@@ -18,10 +21,10 @@ public class TrackerTest {
     // тест методов add и update
     @Test
     public void whenUpdateNameThenReturnNewName() {
-        Item previous = new Item("test1", "testDescription");
+        ru.job4j.tracker.Item previous = new ru.job4j.tracker.Item("test1", "testDescription");
         tracker.add(previous);
         // Создаем новую заявку.
-        Item next = new Item("test2", "testDescription2");
+        ru.job4j.tracker.Item next = new ru.job4j.tracker.Item("test2", "testDescription2");
         // Проставляем старый id из previous, который был сгенерирован выше.
         next.setId(previous.getId());
         // Обновляем заявку в трекере.
@@ -44,7 +47,7 @@ public class TrackerTest {
     // тест метода FindById
     @Test
     public void whenFindByIdThenTrackerHasTrue() {
-        Item[] items = new Item[4];
+        ru.job4j.tracker.Item[] items = new Item[4];
         // создаем тестовые заявки
         items[0] = new Item("testname1", "testDesc1");
         items[1] = new Item("testname2", "testDesc2");

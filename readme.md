@@ -3,5 +3,6 @@ _**Проекты JobFromAtoZ:**_<br/>
 2. Car sales<br/>
 3. Todo list<br/>
 4. Cinema<br/>
-5. Grabber job**
+5. Grabber job<br/>
+6. Magnit**
 
