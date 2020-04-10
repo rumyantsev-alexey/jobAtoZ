@@ -7,14 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="grabber-job" />
+        <module name="tracker" />
         <module name="cinema" />
-        <module name="infobip" />
+        <module name="cars-mvc" />
         <module name="magnit" />
         <module name="todo" />
-        <module name="tracker" />
-        <module name="cars-mvc" />
-        <module name="grabber-job (1)" />
+        <module name="grabber-job" />
+        <module name="infobip" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

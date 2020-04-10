@@ -138,8 +138,8 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.6.2</version>
                 <configuration>
-                    <changeLogFile>/src/main/resources/changelog-install.xml</changeLogFile>
-                    <propertyFile>/src/main/resources/liquibase.properties</propertyFile>
+                    <changeLogFile>todo/src/main/resources/changelog-install.xml</changeLogFile>
+                    <propertyFile>todo/src/main/resources/liquibase.properties</propertyFile>
                 </configuration>
             </plugin>
 

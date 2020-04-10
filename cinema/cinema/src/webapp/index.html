@@ -28,7 +28,7 @@
         // получаем список кинозалов
         $.ajax({
             type: "POST",
-            url: "/chapter_009/cinema",
+            url: "/cinema",
             contentType: 'application/json',
             data:JSON.stringify({type:"getZone", data:"zone"}),
             success: function(data, textStatus, jqXHR){
@@ -47,7 +47,7 @@
         function nextAjax() {
             $.ajax({
                 type: "POST",
-                url: "/chapter_009/cinema",
+                url: "/cinema",
                 contentType: 'application/json',
                 data: JSON.stringify({type: "getSession", data: "session"}),
                 success: function (data, textStatus, jqXHR) {
@@ -125,7 +125,7 @@
         }
         $.ajax({
             type: "POST",
-            url: "/chapter_009/cinema",
+            url: "/cinema",
             contentType: 'application/json',
             data:JSON.stringify(packet),
             success: function(data, textStatus, jqXHR){
@@ -150,7 +150,7 @@
             packet.type = "getCost";
             $.ajax({
                 type: "POST",
-                url: "/chapter_009/cinema",
+                url: "/cinema",
                 contentType: 'application/json',
                 data: JSON.stringify(packet),
                 success: function (data, textStatus, jqXHR) {

@@ -1,5 +1,6 @@
-package ru.job4j;
+package ru.job4j.todo;
 
+import javax.servlet.*;
 import java.io.IOException;
 
 public class ToDoFilter implements Filter {

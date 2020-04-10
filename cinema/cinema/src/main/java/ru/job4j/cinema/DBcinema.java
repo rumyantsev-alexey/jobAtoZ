@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class DBcinema {
     private static final String URL = "jdbc:postgresql://localhost:5432/cinema";
     private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "tester";
+    private static final String PASSWORD = "password";
     private static final Logger LOG = Logger.getLogger(DBcinema.class.getName());
 
     private static final DBcinema INSTANCE = new DBcinema();

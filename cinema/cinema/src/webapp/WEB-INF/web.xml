@@ -4,40 +4,6 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
-    <servlet>
-        <servlet-name>EchoServlet</servlet-name>
-        <servlet-class>ru.job4j.servlets.echo.EchoServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>UserServlet</servlet-name>
-        <servlet-class>ru.job4j.servlets.crud.UserServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>UserCreateServlet</servlet-name>
-        <servlet-class>ru.job4j.servlets.crud.UserCreateServlet</servlet-class>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>UserUpdateServlet</servlet-name>
-        <servlet-class>ru.job4j.servlets.crud.UserUpdateServlet</servlet-class>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>ru.job4j.servlets.crud.Login</servlet-class>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>UServlet</servlet-name>
-        <servlet-class>ru.job4j.servlets.crud.UServlet</servlet-class>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
 
     <servlet>
         <servlet-name>HallServlet</servlet-name>
@@ -45,37 +11,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <servlet-mapping>
-        <servlet-name>EchoServlet</servlet-name>
-        <url-pattern>/echo</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/list</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>UserCreateServlet</servlet-name>
-        <url-pattern>/create</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>UserUpdateServlet</servlet-name>
-        <url-pattern>/edit</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>Login</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>UServlet</servlet-name>
-        <url-pattern>/ajax</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
+     <servlet-mapping>
         <servlet-name>HallServlet</servlet-name>
         <url-pattern>/cinema</url-pattern>
     </servlet-mapping>

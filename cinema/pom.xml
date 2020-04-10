@@ -22,18 +22,6 @@
     </parent>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/net.jcip/jcip-annotations -->
-        <dependency>
-            <groupId>net.jcip</groupId>
-            <artifactId>jcip-annotations</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.0.0-M3</version>
-        </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
@@ -88,19 +76,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.23.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-dbcp2</artifactId>
-            <version>2.5.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
@@ -108,24 +86,11 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.9.9.3</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.18.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito2</artifactId>
-            <version>2.0.2</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4-rule -->
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>2.0.2</version>
-            <scope>test</scope>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.8.9</version>
         </dependency>
     </dependencies>
 
@@ -142,10 +107,10 @@
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>3.8.8</version>
                 <configuration>
-                    <changeLogFile>/src/main/resources/changelog-install.xml</changeLogFile>
-                    <propertyFile>/src/main/resources/liquibase.properties</propertyFile>
+                    <changeLogFile>cinema/src/main/resources/changelog-install.xml</changeLogFile>
+                    <propertyFile>cinema/src/main/resources/liquibase.properties</propertyFile>
                 </configuration>
             </plugin>
 
@@ -161,11 +126,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M3</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
