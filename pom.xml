@@ -12,7 +12,6 @@
 
     <modules>
         <module>carssales</module>
-        <module>infobip</module>
         <module>todo</module>
         <module>cinema</module>
         <module>grabber-job</module>
